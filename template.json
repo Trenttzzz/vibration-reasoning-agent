@@ -1,0 +1,223 @@
+{
+  "_meta": {
+    "deskripsi": "Struktur output parser Condition Monitoring Rotating Equipment",
+    "sumber": "PT Wilmar Nabati Indonesia - Utility Department",
+    "versi": "1.0",
+    "satuan_vibrasi": "mm/s RMS",
+    "satuan_temperatur": "Celcius (°C)",
+    "standar_acuan": "ISO 10816-3"
+  },
+  "_threshold": {
+    "vibrasi_mm_per_s": {
+      "BAIK": "< 2.8",
+      "PERHATIAN": "2.8 - 7.1",
+      "KRITIS": "> 7.1"
+    },
+    "temperatur_celcius": {
+      "BAIK": "< 60",
+      "PERHATIAN": "60 - 80",
+      "KRITIS": "> 80"
+    }
+  },
+  "tanggal": {
+    "_type": "string",
+    "_desc": "Tanggal pengukuran, diambil dari cell D7 atau nama sheet",
+    "_example": "TGL 21 OKT -2 (SELASA)"
+  },
+  "no": {
+    "_type": "integer",
+    "_desc": "Nomor urut equipment dalam daftar",
+    "_example": 2
+  },
+  "area": {
+    "_type": "string",
+    "_desc": "Nama area / lokasi equipment berada",
+    "_example": "Conveyor PP (B5)"
+  },
+  "equipment": {
+    "_desc": "Identitas dan spesifikasi nameplate equipment",
+    "tag_name": {
+      "_type": "string",
+      "_desc": "Kode tag unik equipment",
+      "_example": "BC50202"
+    },
+    "deskripsi": {
+      "_type": "string",
+      "_desc": "Nama / deskripsi lengkap equipment",
+      "_example": "Conv. Coal B5 - #1 Belt Conveyor"
+    },
+    "pondasi": {
+      "_type": "string | null",
+      "_desc": "Tipe pondasi / mounting equipment",
+      "_values": ["Rigid", "Flexible", null],
+      "_example": "Rigid"
+    },
+    "posisi": {
+      "_type": "string | null",
+      "_desc": "Orientasi pemasangan equipment",
+      "_values": ["Horizontal", "Vertikal", null],
+      "_example": "Horizontal"
+    },
+    "kw": {
+      "_type": "float | null",
+      "_desc": "Daya motor dalam kilowatt",
+      "_example": 75.0
+    },
+    "ampere": {
+      "_type": "float | null",
+      "_desc": "Arus nominal motor dalam Ampere",
+      "_example": 132.5
+    },
+    "rpm": {
+      "_type": "float | null",
+      "_desc": "Kecepatan putaran nominal dalam RPM",
+      "_example": 1480.0
+    }
+  },
+  "status": {
+    "_desc": "Status operasi equipment saat pengukuran dilakukan (hanya satu yang true)",
+    "run": {
+      "_type": "boolean",
+      "_desc": "Equipment sedang beroperasi normal",
+      "_example": true
+    },
+    "standby": {
+      "_type": "boolean",
+      "_desc": "Equipment dalam kondisi siaga (tidak beroperasi)",
+      "_example": false
+    },
+    "repair": {
+      "_type": "boolean",
+      "_desc": "Equipment sedang dalam perbaikan",
+      "_example": false
+    }
+  },
+  "driver": {
+    "_desc": "Data pengukuran motor (driver / penggerak utama)",
+    "NDE": {
+      "_desc": "Non-Drive End bearing motor — sisi yang tidak terhubung langsung ke kopling/driven",
+      "ax": {
+        "_type": "float | null",
+        "_desc": "Vibrasi arah axial (mm/s RMS)",
+        "_example": 1.2
+      },
+      "v": {
+        "_type": "float | null",
+        "_desc": "Vibrasi arah vertikal (mm/s RMS)",
+        "_example": 1.9
+      },
+      "h": {
+        "_type": "float | null",
+        "_desc": "Vibrasi arah horizontal (mm/s RMS)",
+        "_example": 1.5
+      },
+      "he": {
+        "_type": "float | null",
+        "_desc": "Vibrasi High-frequency Enveloping / bearing defect indicator (mm/s RMS)",
+        "_example": 1.9
+      },
+      "temp": {
+        "_type": "float | null",
+        "_desc": "Temperatur bearing NDE (°C)",
+        "_example": 38.5
+      }
+    },
+    "DE": {
+      "_desc": "Drive End bearing motor — sisi yang terhubung ke kopling / driven equipment",
+      "ax": {
+        "_type": "float | null",
+        "_desc": "Vibrasi arah axial (mm/s RMS)",
+        "_example": 1.5
+      },
+      "v": {
+        "_type": "float | null",
+        "_desc": "Vibrasi arah vertikal (mm/s RMS)",
+        "_example": 1.5
+      },
+      "h": {
+        "_type": "float | null",
+        "_desc": "Vibrasi arah horizontal (mm/s RMS)",
+        "_example": 1.2
+      },
+      "he": {
+        "_type": "float | null",
+        "_desc": "Vibrasi High-frequency Enveloping (mm/s RMS)",
+        "_example": 1.2
+      },
+      "temp": {
+        "_type": "float | null",
+        "_desc": "Temperatur bearing DE (°C)",
+        "_example": 41.0
+      }
+    },
+    "grounding": {
+      "_type": "string | null",
+      "_desc": "Nilai resistansi grounding motor (Ohm), atau keterangan kondisi grounding",
+      "_example": "3.56"
+    },
+    "temp_terminal_box": {
+      "_type": "float | null",
+      "_desc": "Temperatur terminal box motor (°C) — indikator kondisi koneksi listrik",
+      "_example": 38.1
+    }
+  },
+  "driven": {
+    "_desc": "Data pengukuran equipment yang digerakkan (gearbox, pompa, fan, dll)",
+    "DE": {
+      "_desc": "Drive End bearing driven — sisi yang terhubung ke kopling / motor",
+      "ax": {
+        "_type": "float | null",
+        "_desc": "Vibrasi arah axial (mm/s RMS)",
+        "_example": 2.3
+      },
+      "v": {
+        "_type": "float | null",
+        "_desc": "Vibrasi arah vertikal (mm/s RMS)",
+        "_example": 1.5
+      },
+      "h": {
+        "_type": "float | null",
+        "_desc": "Vibrasi arah horizontal (mm/s RMS)",
+        "_example": 1.5
+      },
+      "he": {
+        "_type": "float | null",
+        "_desc": "Vibrasi High-frequency Enveloping (mm/s RMS)",
+        "_example": 5.7
+      },
+      "temp": {
+        "_type": "float | null",
+        "_desc": "Temperatur bearing DE driven (°C)",
+        "_example": 48.5
+      }
+    },
+    "NDE": {
+      "_desc": "Non-Drive End bearing driven — sisi ujung yang berlawanan dari kopling",
+      "ax": {
+        "_type": "float | null",
+        "_desc": "Vibrasi arah axial (mm/s RMS)",
+        "_example": 1.2
+      },
+      "v": {
+        "_type": "float | null",
+        "_desc": "Vibrasi arah vertikal (mm/s RMS)",
+        "_example": 0.8
+      },
+      "h": {
+        "_type": "float | null",
+        "_desc": "Vibrasi arah horizontal (mm/s RMS)",
+        "_example": 1.4
+      },
+      "he": {
+        "_type": "float | null",
+        "_desc": "Vibrasi High-frequency Enveloping (mm/s RMS)",
+        "_example": 3.2
+      },
+      "temp": {
+        "_type": "float | null",
+        "_desc": "Temperatur bearing NDE driven (°C)",
+        "_example": 41.3
+      }
+    }
+  }
+}

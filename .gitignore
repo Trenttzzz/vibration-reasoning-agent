@@ -1,0 +1,10 @@
+.env
+__pycache__
+.venv-agent
+
+input/*
+output/*
+
+template_parsed.json
+
+.DS_Store

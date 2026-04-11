@@ -31,7 +31,7 @@ The pipeline has 6 stages:
 ## Project Structure
 
 ```
-agent-wilmar/
+vibration-reasoning-agent/
 ├── main.py                # CLI entry point with argparse
 ├── requirements.txt       # Python dependencies
 ├── .env                   # Environment variables (gitignored)
@@ -64,8 +64,8 @@ agent-wilmar/
 
 ```bash
 # Clone the repository
-git clone <repo-url>
-cd agent-wilmar
+git clone git@github.com:Trenttzzz/vibration-reasoning-agent.git
+cd vibration-reasoning-agent
 
 # Create virtual environment
 python -m venv .venv-agent

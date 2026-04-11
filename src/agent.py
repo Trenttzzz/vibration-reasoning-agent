@@ -27,30 +27,67 @@ def build_fallback_narrative(facts: PreAnalysisFacts) -> EquipmentNarrative:
     )
 
 
-def build_agent_narrative(facts: PreAnalysisFacts, settings: Settings) -> EquipmentNarrative:
-    if not settings.openrouter_api_key:
-        raise RuntimeError("OPENROUTER_API_KEY belum diisi.")
+def build_chat_model(settings: Settings):
+    provider = settings.llm_provider.lower().strip()
 
+    if provider == "openrouter":
+        if not settings.openrouter_api_key:
+            raise RuntimeError("OPENROUTER_API_KEY belum diisi.")
+
+        try:
+            from langchain_openrouter import ChatOpenRouter
+        except ImportError as exc:
+            raise RuntimeError(
+                "langchain_openrouter belum terpasang. Jalankan pip install -r requirements.txt"
+            ) from exc
+
+        return ChatOpenRouter(
+            model=settings.openrouter_model,
+            temperature=settings.openrouter_temperature,
+            max_tokens=settings.openrouter_max_tokens,
+            reasoning={
+                "effort": settings.openrouter_reasoning_effort,
+                "summary": settings.openrouter_reasoning_summary,
+            },
+        )
+
+    if provider == "sumopod":
+        if not settings.sumopod_api_key:
+            raise RuntimeError("SUMOPOD_API_KEY belum diisi.")
+
+        try:
+            from langchain_openai import ChatOpenAI
+        except ImportError as exc:
+            raise RuntimeError(
+                "langchain_openai belum terpasang. Jalankan pip install -r requirements.txt"
+            ) from exc
+
+        return ChatOpenAI(
+            model=settings.sumopod_model,
+            api_key=settings.sumopod_api_key,
+            base_url=settings.sumopod_base_url,
+            temperature=settings.sumopod_temperature,
+            max_tokens=settings.sumopod_max_tokens,
+        )
+
+    raise RuntimeError(
+        f"LLM provider '{settings.llm_provider}' tidak dikenali. "
+        "Gunakan 'openrouter' atau 'sumopod'."
+    )
+
+
+def build_agent_narrative(facts: PreAnalysisFacts, settings: Settings) -> EquipmentNarrative:
     try:
         from langchain.agents import create_agent
         from langchain.agents.structured_output import ToolStrategy
-        from langchain_openrouter import ChatOpenRouter
     except ImportError as exc:
         raise RuntimeError(
-            "langchain atau langchain_openrouter belum terpasang. Jalankan pip install -r requirements.txt"
+            "langchain belum terpasang. Jalankan pip install -r requirements.txt"
         ) from exc
 
     from .tools import get_fault_library, get_report_style_guide, get_threshold_reference
 
-    model = ChatOpenRouter(
-        model=settings.openrouter_model,
-        temperature=settings.temperature,
-        max_tokens=settings.max_tokens,
-        reasoning={
-            "effort": settings.reasoning_effort,
-            "summary": settings.reasoning_summary,
-        },
-    )
+    model = build_chat_model(settings)
 
     agent = create_agent(
         model=model,
@@ -92,5 +129,6 @@ def analyze_equipment(
 
     try:
         return build_agent_narrative(facts, settings)
-    except Exception:
+    except Exception as exc:
+        print(f"[WARN] build_agent_narrative gagal, fallback dipakai: {exc}")
         return build_fallback_narrative(facts)

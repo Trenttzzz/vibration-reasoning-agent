@@ -1,7 +1,7 @@
 {
   "_meta": {
     "deskripsi": "Struktur output parser Condition Monitoring Rotating Equipment",
-    "sumber": "PT Wilmar Nabati Indonesia - Utility Department",
+    "sumber": "PT XYZ",
     "versi": "1.0",
     "satuan_vibrasi": "mm/s RMS",
     "satuan_temperatur": "Celcius (°C)",

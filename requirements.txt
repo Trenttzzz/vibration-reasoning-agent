@@ -5,3 +5,6 @@ langchain>=1.0.0
 langchain-openrouter>=0.1.0
 openpyxl>=3.1.2
 langchain-openai>=0.1.0
+fastapi>=0.115.0
+uvicorn>=0.34.0
+python-multipart>=0.0.18

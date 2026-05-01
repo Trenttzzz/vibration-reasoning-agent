@@ -4,6 +4,7 @@ import tempfile
 from pathlib import Path
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi.staticfiles import StaticFiles
 
 from .pipeline import analyze_records
 from .schemas import FinalReport
@@ -61,3 +62,9 @@ async def analyze(
     finally:
         if tmp_path and tmp_path.exists():
             tmp_path.unlink()
+
+
+# Serve built frontend (must be last, after all API routes)
+STATIC_DIR = Path(__file__).parent / "static"
+if STATIC_DIR.exists():
+    app.mount("/", StaticFiles(directory=str(STATIC_DIR), html=True), name="static")

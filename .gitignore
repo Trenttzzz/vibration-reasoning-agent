@@ -8,3 +8,10 @@ output/*
 template_parsed.json
 
 .DS_Store
+
+.opencode/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+src/static/

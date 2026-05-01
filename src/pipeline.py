@@ -27,12 +27,11 @@ def _load_input_records(input_path: str | Path) -> list[dict]:
     raise ValueError("Format input tidak didukung. Gunakan file .xlsx, .xlsm, atau .json")
 
 
-def run_pipeline(
+def analyze_records(
     input_path: str | Path,
-    output_docx: str | Path,
-    output_json: str | Path | None = None,
     mode: str = "agent",
 ) -> FinalReport:
+    """Run the full analysis pipeline and return FinalReport without writing files."""
     settings = get_settings()
     raw_records = _load_input_records(input_path)
 
@@ -46,7 +45,7 @@ def run_pipeline(
             invalid_rows.append({
                 "row": item,
                 "error": str(exc),
-        })
+            })
 
     records = validated_records
 
@@ -58,6 +57,7 @@ def run_pipeline(
         for idx, bad in enumerate(invalid_rows[:5], start=1):
             print(f"  {idx}. Error: {bad['error']}")
             print(f"     Row preview: {bad['row']}")
+
     running_records = [record for record in records if record.status.run]
     target_records = running_records or records
 
@@ -71,6 +71,17 @@ def run_pipeline(
         narratives=narratives,
         settings=settings,
     )
+
+    return final_report
+
+
+def run_pipeline(
+    input_path: str | Path,
+    output_docx: str | Path,
+    output_json: str | Path | None = None,
+    mode: str = "agent",
+) -> FinalReport:
+    final_report = analyze_records(input_path, mode=mode)
 
     write_report_docx(final_report, output_docx)
 
